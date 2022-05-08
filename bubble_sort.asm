@@ -2,53 +2,46 @@
 	next_line: .asciiz "\n"	
 .text
 
-
+#base address of the input array will be stored in $t2.
 jal input_int 
 move $t1,$t4			
 
-#input: X=The Starting address of input numbers (each 32bits) should be entered from
-# terminal in decimal format. It is stored in $t2
+#base address of the input array will be stored in $t2.
 jal input_int
 move $t2,$t4
 
-#input:Y= The Starting address of output numbers(each 32bits) should be entered
-# from terminal in decimal. It is stored in $t3
-#jal input_int
-#move $t3,$t4 
 
-#input: The numbers to be sorted are now entered from terminal.
-# They are stored in memory array whose starting address is given by $t2
 move $t8,$t2
-move $s7,$zero	#i = 0
+#this loop will take in the input of our unsorted array
+move $s7,$zero	#i = 0 = $s7
 loop1:  beq $s7,$t1,loop1end
 	jal input_int
 	sw $t4,0($t2)
 	addi $t2,$t2,4
-      	addi $s7,$s7,1
+      	addi $s7,$s7,1 #s7++
         j loop1      
 loop1end: move $t2,$t8  
 
 
-move $s7,$zero
-move $s6,$zero
-subi $t1,$t1,1
+move $s7,$zero #i = 0 = $s7
+move $s6,$zero #j = 0 = $s6
+subi $t1,$t1,1 #n=n-1
 move $t9,$t1
 outerloop: 
-	beq $s7,$t1, outerloopend
+	beq $s7,$t1, outerloopend #if i==n-1: goto outerloopend
 	sub $t9,$t1,$s7
-	#addi $t9,$t9,1
 	
 	innerloop:
 
 		
-		beq $s6,$t9, innerloopend
+		beq $s6,$t9, innerloopend #if j==n-1-i: goto innerloopend
 		lw $s2,0($t2)
 		addi $t6,$t2,4
 		lw $s1,0($t6)
 		
 		slt $a0,$s2,$s1
 		
-		beq $a0,$zero,swap
+		beq $a0,$zero,swap #swap if arr[j]>arr[j+1]
 		
 		jal cont
 		
@@ -90,13 +83,13 @@ loop: beq $s7,$t1,end
 
 end:  li $v0,10
       syscall
-#input from command line(takes input and stores it in $t6)
+#input from command line
 input_int: li $v0,5
 	   syscall
 	   move $t4,$v0
 	   jr $ra
-#print integer(prints the value of $t6 )
-print_int: li $v0,1		#1 implie
+#prints integer
+print_int: li $v0,1		
 	   move $a0,$t4
 	   syscall
 	   jr $ra
