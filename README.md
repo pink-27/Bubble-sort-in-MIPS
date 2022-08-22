@@ -8,7 +8,7 @@ OR
 • In MARS-MIPS, use the F3 to assemble the code and F5 to run
 it.
 
-#Instructions to run the RV-FPGA program files
+# Instructions to run the RV-FPGA program files
  Make sure you are in the directory which contains the file
    IMT2021018 IMT2021065_Q2B.C
    IMT2021018 IMT2021065_Q2B.S
